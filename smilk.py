@@ -2,12 +2,13 @@
 
 import process
 import sys
+import smRpc
 
 try:
     f = open(sys.argv[1], "r")
     lines = f.readlines()
     for line in lines:
-        print(process.processCmd(line))
+        print(process.processCmd(line), end="")
 except IndexError:
 
 
@@ -16,19 +17,22 @@ except IndexError:
         print('''
      __  __ 
  ___|  \/  |
-/ __| |\/| |
-\__ \ |  | |
+/ __| |\/| | Strawberry Milk
+\__ \ |  | | Programming Language
 |___/_|  |_|
     ''')
-        print("Strawberry Milk Programming Language Interpreter Shell")
+        print("Interpreter Shell - - Pre-Alpha")
         print("'quit' to quit")
         print("-==========-")
 
         while True:
             cmd = input("smilk >> ")
             if cmd == "quit":
-                print("  Thanks for using sM!")
+                print("Thanks for using sM!")
                 exit()
+            elif cmd == "enablerpc":
+                print("Thanks to Saturn.py#0001")
+                smRpc.enable()
             else:
                 res = process.processCmd(cmd)
-                print(res)
+                print(res, end="")

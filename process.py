@@ -1,6 +1,21 @@
 # Strawberry Milk Programming Language Command Processor
 
 import os
+import time
+
+class point():
+    pointName = "programStart"
+    pointLine = 1
+
+    def __repr__(self):
+        return self.pointName
+
+sm_programStart = point()
+global points
+points = [sm_programStart]
+
+global vars
+vars = {}
 
 
 class error():
@@ -51,6 +66,46 @@ def runFile(file):
     file = file.replace(")", "")
     os.system(f"python3 smilk.py {file}")
 
+def systemRun(cmd):
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+    os.system(cmd)
+
+def parseCommas(toParse):
+    p = toParse
+    p = p.split(", ")
+    return p
+
+def createPoint(cmd):
+
+    global points
+
+    pointDescriptions = parseCommas(cmd)
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+    newPoint = point()
+    newPoint.pointName = pointDescriptions[0]
+    newPoint.pointLine = pointDescriptions[1]
+    points.append(newPoint)
+
+
+def listPoints():
+    global points
+    return points
+
+def declareVar(cmd):
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+
+    varDescriptions = parseCommas(cmd)
+    global vars
+    vars[varDescriptions[0]] = varDescriptions[1]
+    return ""
+
+
 
 def processCmd(cmd):
     result = ""
@@ -58,12 +113,22 @@ def processCmd(cmd):
     try:
         if cmd == "":
             return ""
+        elif "[c]" in cmd:
+            return ""
         elif parseToFirstParen(cmd)[0] == "print":
             result = parsePrint(parseToFirstParen(cmd)[1])
         elif parseToFirstParen(cmd)[0] == "clear":
-            clear()
+            result = clear()
         elif parseToFirstParen(cmd)[0] == "run":
-            runFile(parseToFirstParen(cmd)[1])
+            result = runFile(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "sys":
+            result = systemRun(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "createPoint":
+            result = createPoint(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "listPoints":
+            result = listPoints()
+        elif parseToFirstParen(cmd)[0] == "dvar":
+            result = declareVar(parseToFirstParen(cmd)[1])
         else:
             result = sm_nullReference
     except:

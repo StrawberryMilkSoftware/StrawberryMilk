@@ -30,7 +30,7 @@ sm_syntaxError.errorDesc = "There is an error in the syntax of your code. Please
 
 sm_nullReference = error()
 sm_nullReference.errorName = "Null Reference (sm_nullReference)"
-sm_nullReference.errorDesc = "A function was not found for one of your commands."
+sm_nullReference.errorDesc = "A reference was not found. (Function, variable, etc.)"
 
 sm_parseError = error()
 sm_parseError.errorName = "Parsing Error (sm_nullReference)"
@@ -53,6 +53,19 @@ def parsePrint(toParse):
     printString = toParse.replace(")", "")
 
     return printString
+
+def parsePrintVar(toParse):
+
+    if not ")" in toParse:
+        return sm_parseError
+    printString = toParse.replace(")", "")
+    global vars
+    try:
+        printStringDone = vars[printString]
+        return printStringDone
+    except:
+        return sm_nullReference
+    
 
 def clear():
     if os.name == "nt":
@@ -102,8 +115,29 @@ def declareVar(cmd):
 
     varDescriptions = parseCommas(cmd)
     global vars
-    vars[varDescriptions[0]] = varDescriptions[1]
-    return ""
+    vars[varDescriptions[0]] = varDescriptions[1].replace(r"\n", "")
+
+def getInput(cmd):
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+    inputDescriptions = parseCommas(cmd)
+    global vars
+    newVarName = inputDescriptions[1].replace("\n", "")
+
+    vars[newVarName] = input(inputDescriptions[0])
+
+def listVars():
+    global vars
+    return vars
+
+def wait(stime):
+    if not ")" in stime:
+        return sm_parseError
+    stime = stime.replace(")", "")
+    stime = float(stime)
+
+    time.sleep(stime)
 
 
 
@@ -113,22 +147,32 @@ def processCmd(cmd):
     try:
         if cmd == "":
             return ""
+        elif cmd == None:
+            return ""
         elif "[c]" in cmd:
             return ""
         elif parseToFirstParen(cmd)[0] == "print":
             result = parsePrint(parseToFirstParen(cmd)[1])
         elif parseToFirstParen(cmd)[0] == "clear":
-            result = clear()
+            clear()
         elif parseToFirstParen(cmd)[0] == "run":
             result = runFile(parseToFirstParen(cmd)[1])
         elif parseToFirstParen(cmd)[0] == "sys":
             result = systemRun(parseToFirstParen(cmd)[1])
         elif parseToFirstParen(cmd)[0] == "createPoint":
-            result = createPoint(parseToFirstParen(cmd)[1])
+            createPoint(parseToFirstParen(cmd)[1])
         elif parseToFirstParen(cmd)[0] == "listPoints":
             result = listPoints()
         elif parseToFirstParen(cmd)[0] == "dvar":
-            result = declareVar(parseToFirstParen(cmd)[1])
+            declareVar(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "printvar":
+            result = parsePrintVar(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "input":
+            getInput(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "listVars":
+            result = listVars()
+        elif parseToFirstParen(cmd)[0] == "wait":
+            wait(parseToFirstParen(cmd)[1])
         else:
             result = sm_nullReference
     except:

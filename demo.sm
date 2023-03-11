@@ -1,1 +1,7 @@
-print(Hello, world!)
+[c] demo file
+
+print(hi)
+
+wait(1)
+
+print(bye)

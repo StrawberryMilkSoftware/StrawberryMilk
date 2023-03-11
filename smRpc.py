@@ -4,7 +4,10 @@ import time
 
 
 client_id = "1082120410373562438"
-RPC = Presence(client_id)
+try:
+    RPC = Presence(client_id)
+except:
+    print("")
 
 def enable():
     RPC.connect()

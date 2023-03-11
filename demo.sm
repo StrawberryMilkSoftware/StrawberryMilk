@@ -1,7 +1,21 @@
 [c] demo file
+[c] to run me, type in the terminal: python3 smilk.py demo.sm
 
-print(hi)
+input(Enter a number: , num1)
+input(Enter another number: , num2)
 
-wait(1)
+add(num1, num2, addedNums)
+sub(num1, num2, subtractedNums)
+mul(num1, num2, multipliedNums)
+div(num1, num2, dividedNums)
+print(Those numbers add  to:)
+printvar(addedNums)
+print(Those numbers subtract to:)
+printvar(subtractedNums)
+print(Those numbers multiply to:)
+printvar(multipliedNums)
+print(Those numbers divide to:)
+printvar(dividedNums)
 
-print(bye)
+wait(5)
+print(Waited 5 seconds!)

@@ -139,6 +139,92 @@ def wait(stime):
 
     time.sleep(stime)
 
+def remVar(cmd):
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+    global vars
+    try:
+        del vars[cmd]
+    except:
+        return sm_nullReference
+
+def combine(cmd):
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+    global vars
+
+    varsToCombine = parseCommas(cmd)
+    try:
+        vars[varsToCombine[2]] = vars[varsToCombine[0]] + vars[varsToCombine[1]]
+    except IndexError:
+        return sm_syntaxError
+    except:
+        return sm_nullReference
+    
+def add(cmd):
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+    global vars
+
+    varsToAdd = parseCommas(cmd)
+    try:
+        vars[varsToAdd[2]] = float(vars[varsToAdd[0]]) + float(vars[varsToAdd[1]])
+    except IndexError:
+        return sm_syntaxError
+    except:
+        return sm_nullReference
+
+def sub(cmd):
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+    global vars
+
+    varsToSub = parseCommas(cmd)
+    try:
+        vars[varsToSub[2]] = float(vars[varsToSub[0]]) - float(vars[varsToSub[1]])
+    except IndexError:
+        return sm_syntaxError
+    except:
+        return sm_nullReference
+
+def mul(cmd):
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+    global vars
+
+    varsToMul = parseCommas(cmd)
+    try:
+        vars[varsToMul[2]] = float(vars[varsToMul[0]]) * float(vars[varsToMul[1]])
+    except IndexError:
+        return sm_syntaxError
+    except:
+        return sm_nullReference
+    
+def div(cmd):
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+    global vars
+
+    varsToDiv = parseCommas(cmd)
+    try:
+        vars[varsToDiv[2]] = float(vars[varsToDiv[0]]) / float(vars[varsToDiv[1]])
+    except IndexError:
+        return sm_syntaxError
+    except:
+        return sm_nullReference
+    
+def python(cmd):
+    if not ")" in cmd:
+        return sm_parseError
+    cmd = cmd.replace(")", "")
+
+    eval(cmd)
 
 
 def processCmd(cmd):
@@ -146,6 +232,8 @@ def processCmd(cmd):
 
     try:
         if cmd == "":
+            return ""
+        elif cmd == "\n":
             return ""
         elif cmd == None:
             return ""
@@ -163,7 +251,7 @@ def processCmd(cmd):
             createPoint(parseToFirstParen(cmd)[1])
         elif parseToFirstParen(cmd)[0] == "listPoints":
             result = listPoints()
-        elif parseToFirstParen(cmd)[0] == "dvar":
+        elif parseToFirstParen(cmd)[0] == "var":
             declareVar(parseToFirstParen(cmd)[1])
         elif parseToFirstParen(cmd)[0] == "printvar":
             result = parsePrintVar(parseToFirstParen(cmd)[1])
@@ -173,6 +261,20 @@ def processCmd(cmd):
             result = listVars()
         elif parseToFirstParen(cmd)[0] == "wait":
             wait(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "removeVar":
+            remVar(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "combine":
+            combine(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "add":
+            add(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "sub":
+            sub(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "mul":
+            mul(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "div":
+            div(parseToFirstParen(cmd)[1])
+        elif parseToFirstParen(cmd)[0] == "python":
+            python(parseToFirstParen(cmd)[1])
         else:
             result = sm_nullReference
     except:

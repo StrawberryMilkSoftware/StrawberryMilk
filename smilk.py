@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 # Strawberry Milk Programming Language Interpreter Shell
 
 import process

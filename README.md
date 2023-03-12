@@ -24,4 +24,4 @@ In strawberryMilk, all you have to do is:
 clear()
 ```
 
-*Amazing!*
+*Amazing, right?*
